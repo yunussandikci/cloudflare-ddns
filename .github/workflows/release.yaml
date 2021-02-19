@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Install Buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+      - name: Resolve Version
+        id: resolve_version
+        run: echo "::set-output name=version::${GITHUB_REF#refs/tags/}"
+      - name: Build and Push Docker Images
+        run: |
+          docker buildx build . \
+            --push --tag yunussandikci/cloudflare-ddns:${{ steps.resolve_version.outputs.version }} \
+            --platform linux/amd64,linux/arm/v7,linux/arm64
