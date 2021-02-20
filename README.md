@@ -3,7 +3,7 @@
 # Cloudflare Dynamic DNS
 
 **Cloudflare Dynamic DNS** is a minimal project that updates your dns records on cloudflare dynmically with its own ip adress within the period you specified. 
-Docker image is only ~4 megabyte, and supports `amd64`, `arm/v7` and `arm64` archictectures. Yes, it **supports Raspberry Pi!** 
+Docker image is only ~2 megabyte, and supports `amd64`, `arm/v7` and `arm64` archictectures. Yes, it **supports Raspberry Pi!** 
 
 ## Usage
 You can with using following example to run it on your Docker
