@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/pkg/errors"
@@ -31,7 +32,7 @@ func (c *cloudFlareService) GetZoneId(zoneName string) (string, error) {
 }
 
 func (c *cloudFlareService) GetDnsRecordId(zoneId string, recordName string) (string, error) {
-	records, dnsRecordsErr := c.client.DNSRecords(zoneId, cloudflare.DNSRecord{
+	records, dnsRecordsErr := c.client.DNSRecords(context.Background(), zoneId, cloudflare.DNSRecord{
 		Name: recordName,
 	})
 	if dnsRecordsErr != nil {
@@ -44,7 +45,8 @@ func (c *cloudFlareService) GetDnsRecordId(zoneId string, recordName string) (st
 }
 
 func (c *cloudFlareService) UpdateDnsRecord(zoneId string, recordId, content string) error {
-	updateDnsRecordErr := c.client.UpdateDNSRecord(zoneId, recordId, cloudflare.DNSRecord{Content: content})
+	updateDnsRecordErr := c.client.UpdateDNSRecord(context.Background(),
+		zoneId, recordId, cloudflare.DNSRecord{Content: content})
 	if updateDnsRecordErr != nil {
 		return updateDnsRecordErr
 	}

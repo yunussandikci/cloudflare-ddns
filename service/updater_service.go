@@ -13,18 +13,18 @@ type UpdaterService interface {
 
 type updaterService struct {
 	cloudFlareService CloudFlareService
-	ipAddressService IPAddressService
-	lastIpAddress string
-	domains []string
-	interval uint64
+	ipAddressService  IPAddressService
+	lastIpAddress     string
+	domains           []string
+	interval          uint64
 }
 
 func NewUpdaterService(cfService CloudFlareService, ipService IPAddressService, domains []string, interval uint64) UpdaterService {
 	return &updaterService{
 		cloudFlareService: cfService,
 		ipAddressService:  ipService,
-		domains: domains,
-		interval: interval,
+		domains:           domains,
+		interval:          interval,
 	}
 }
 
@@ -35,7 +35,7 @@ func (u *updaterService) Start() {
 	if scheduleErr != nil {
 		panic(scheduleErr)
 	}
-	<- s.Start()
+	<-s.Start()
 }
 
 func (u *updaterService) update() {
@@ -61,7 +61,16 @@ func (u *updaterService) updateIpAddress() bool {
 
 func (u *updaterService) updateDomains() {
 	for _, domain := range u.domains {
-		zoneName := fmt.Sprintf("%s.%s",strings.Split(domain, ".")[1], strings.Split(domain, ".")[2])
+		domainParts := strings.Split(domain, ".")
+		hasSubdomain := len(domainParts) == 3
+
+		var zoneName string
+		if hasSubdomain {
+			zoneName = fmt.Sprintf("%s.%s", domainParts[1], domainParts[2])
+		} else {
+			zoneName = fmt.Sprintf("%s.%s", domainParts[0], domainParts[1])
+		}
+
 		zoneId, zoneIdErr := u.cloudFlareService.GetZoneId(zoneName)
 		if zoneIdErr != nil {
 			panic(zoneIdErr)
