@@ -13,14 +13,14 @@ docker run \
   -e CLOUDFLARE_TOKEN=YOUR_CLOUDFLARE_TOKEN \
   -e INTERVAL=TIME_INTERVAL_IN_MINUTES \ //like 5
   -e DOMAINS=COMMA_SEPERATED_DOMAINS \ //like foo.bar.com, baz,bar.com
-   yunussandikci/cloudflare-ddns:1.0.0
+   yunussandikci/cloudflare-ddns:1.0.1
 ```
 2. Docker Compose
 ```
 cloudflare-ddns:
-  image: yunussandikci/cloudflare-ddns:1.0.0
+  image: yunussandikci/cloudflare-ddns:1.0.1
   environment:
     CLOUDFLARE_TOKEN: "YOUR_CLOUDFLARE_TOKEN"
-    DOMAINS: "COMMA_SEPERATED_DOMAINS" //like foo.bar.com, baz,bar.com
+    DOMAINS: "COMMA_SEPERATED_DOMAINS" //like foo.bar.baz, bar.baz
     INTERVAL: "TIME_INTERVAL_IN_MINUTES" //like 5
 ```
